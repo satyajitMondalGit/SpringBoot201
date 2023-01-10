@@ -29,7 +29,7 @@ public class Booking {
 	@Id
 	 @GeneratedValue(strategy = GenerationType.AUTO)
 	 @Column(name = "booking_id")
-	 private Long id;
+	 private Long bookingId;
 	
 	@Column(name = "booking_date")
 	 private LocalDate bookingDate;
