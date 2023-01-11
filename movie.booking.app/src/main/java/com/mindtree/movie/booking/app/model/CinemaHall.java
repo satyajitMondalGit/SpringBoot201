@@ -33,11 +33,13 @@ public class CinemaHall {
 	@Column(name = "hall_id")
 	private long hallId;
 	
+	@Column(name = "hall_name")
+	private String hallName;
+	
 	@Column(name = "hall_type")
 	private String hallType;
 	
 	@OneToMany(mappedBy = "cinemaHall", cascade = CascadeType.ALL)
-	@JoinColumn(name = "fk_hall_id", referencedColumnName = "hall_id" )
 	@JsonManagedReference
 	private List<Screening> screenings;
 	

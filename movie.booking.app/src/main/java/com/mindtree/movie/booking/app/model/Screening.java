@@ -49,8 +49,10 @@ public class Screening {
 	 @JsonBackReference
 	 private CinemaHall cinemaHall;
 	 
-	 @OneToOne
+	 @ManyToOne
 	 @JsonManagedReference
 	 private Movie movie;
+
+	
 
 }

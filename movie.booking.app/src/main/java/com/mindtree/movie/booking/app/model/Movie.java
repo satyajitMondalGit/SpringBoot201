@@ -1,12 +1,15 @@
 package com.mindtree.movie.booking.app.model;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -32,14 +35,18 @@ public class Movie {
 	 @Column(name = "title")
 	 private String title;
 	 
+	 @Column(name = "release_date")
+	 private LocalDate releaseDate;
+	 
 	 @Column(name = "genere")
 	 private String genere;
 	 
 	 @Column(name = "duration")
 	 private String duration; 
 	 
-	 @OneToOne(mappedBy = "movie")
-	 @JoinColumn(name = "fk_movie_id", referencedColumnName = "movie_id")
+	 
+	 
+	 @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL )
 	 @JsonBackReference
-	 private Screening  screening;
+	 private List<Screening>  screenings;
 }

@@ -35,7 +35,6 @@ public class User {
 	private String email;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	@JoinColumn(name = "fk_user_id", referencedColumnName = "user_id")
 	@JsonManagedReference
 	private List<Booking> bookings;
 

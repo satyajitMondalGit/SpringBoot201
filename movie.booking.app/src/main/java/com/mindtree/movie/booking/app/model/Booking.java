@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -29,7 +30,7 @@ public class Booking {
 	@Id
 	 @GeneratedValue(strategy = GenerationType.AUTO)
 	 @Column(name = "booking_id")
-	 private Long bookingId;
+	 private long bookingId;
 	
 	@Column(name = "booking_date")
 	 private LocalDate bookingDate;
@@ -40,7 +41,12 @@ public class Booking {
 	 @Column(name = "tkt_qty")
 	 private int ticketQty;
 	 
+	 @Column(name= "screening_id")
+	 private long screeningId;
+	 
 	 @ManyToOne
 	 @JsonBackReference
 	 private User user;
+	 
+	 
 }
