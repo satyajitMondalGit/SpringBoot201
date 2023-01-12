@@ -10,5 +10,6 @@ public interface CinemaHallService {
 
 	CinemaHallDao addCinemaHall(CinemaHallDao cinemaDao);
 
+	
 
 }

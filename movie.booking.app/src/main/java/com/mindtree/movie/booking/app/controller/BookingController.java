@@ -1,36 +1,45 @@
 package com.mindtree.movie.booking.app.controller;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import springfox.documentation.annotations.ApiIgnore;
+import com.mindtree.movie.booking.app.dao.ResponseCinemaHallDao;
+import com.mindtree.movie.booking.app.dao.UserDao;
+import com.mindtree.movie.booking.app.service.BookingService;
 
 @RestController
 public class BookingController {
 	
 
-    @ApiIgnore
-    @RequestMapping(value="/")
-    public void redirect(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/swagger-ui.html");
-    }
+	@Autowired
+	private BookingService bookingService;
+	
 
-    
-    ResponseEntity<?> getAllmovieShowDetails(){
-    	return null;
+    @GetMapping("/allMovieShows")
+    ResponseEntity<ResponseCinemaHallDao> getAllmovieShowDetails(){
+    	return new ResponseEntity<ResponseCinemaHallDao>(bookingService.getAlShow(),HttpStatus.OK);
+    }
+    @PostMapping("/bookTickets")
+    @ResponseBody
+    ResponseEntity<UserDao> bookTickets(@RequestParam Long userId, @RequestParam long screeningId, @RequestParam int ticketsQuentity ){
+    	
+    	
+    	return new ResponseEntity<UserDao>(bookingService.bookTickets(userId,screeningId,ticketsQuentity),HttpStatus.OK);
     }
     
-    ResponseEntity<?> bookTickets(){
-    	return null;
-    }
     
-    ResponseEntity<?> getEarlierTicketsDetails(){
-    	return null;
+    @GetMapping("/bookiedTicketDetails/(userId)")
+    ResponseEntity<UserDao> getEarlierTicketsDetails(@PathVariable long userId ){
+    	
+    	   	
+    	return new ResponseEntity<UserDao>(bookingService.getEarlierTicketsDetails(userId),HttpStatus.OK);
     }
     
     

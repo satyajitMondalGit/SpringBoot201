@@ -3,6 +3,8 @@ package com.mindtree.movie.booking.app.dao;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.mindtree.movie.booking.app.model.Movie;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

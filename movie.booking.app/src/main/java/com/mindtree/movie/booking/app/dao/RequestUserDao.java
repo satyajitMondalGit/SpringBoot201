@@ -11,12 +11,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDao {
+public class RequestUserDao {
 
 	
 	private long userId;
 	private String userName;
 	private String mobileNumber;
 	private String email;
-	private List<BookingDao> bookingsDao;
 }
