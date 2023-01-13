@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -20,8 +21,9 @@ import lombok.ToString;
 @Table(name = "user")
 public class User {
 	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name  = "user_id")
 	private long userId;
 	
@@ -34,8 +36,5 @@ public class User {
 	@Column(name="email")
 	private String email;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private List<Booking> bookings;
 
 }

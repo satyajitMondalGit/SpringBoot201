@@ -1,8 +1,8 @@
 package com.mindtree.movie.booking.app.service;
 
-import com.mindtree.movie.booking.app.dao.MovieDao;
+import com.mindtree.movie.booking.app.dto.MovieDTO;
 
 public interface MovieService {
 
-	MovieDao addMovie(MovieDao movieDao);
+	MovieDTO addMovie(MovieDTO movieDTO);
 }

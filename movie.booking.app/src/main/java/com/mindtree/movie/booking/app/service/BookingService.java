@@ -1,14 +1,19 @@
 package com.mindtree.movie.booking.app.service;
 
-import com.mindtree.movie.booking.app.dao.ResponseCinemaHallDao;
-import com.mindtree.movie.booking.app.dao.UserDao;
+import java.util.List;
+
+import com.mindtree.movie.booking.app.dto.BookingDTO;
+import com.mindtree.movie.booking.app.dto.ResponseBookingDTO;
+import com.mindtree.movie.booking.app.dto.ResponseCinemaHallDTO;
+import com.mindtree.movie.booking.app.dto.UserDTO;
+import com.mindtree.movie.booking.app.model.CinemaHall;
 
 public interface BookingService {
 
-	ResponseCinemaHallDao getAlShow();
+	List<ResponseCinemaHallDTO> getAlShow();
 
-	UserDao bookTickets(Long userId, long screeningId, int ticketsQuentity);
+	ResponseBookingDTO bookTickets(Long userId, long screeningId, int ticketsQuentity);
 
-	UserDao getEarlierTicketsDetails(long userId);
+	List<BookingDTO> getEarlierTicketsDetails(long userId);
 
 }

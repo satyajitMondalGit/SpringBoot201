@@ -29,7 +29,7 @@ import lombok.ToString;
 public class CinemaHall {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "hall_id")
 	private long hallId;
 	

@@ -1,10 +1,10 @@
 package com.mindtree.movie.booking.app.service;
 
-import com.mindtree.movie.booking.app.dao.RequestCinemaHallDao;
-import com.mindtree.movie.booking.app.dao.ResponseCinemaHallDao;
+import com.mindtree.movie.booking.app.dto.RequestCinemaHallDTO;
+import com.mindtree.movie.booking.app.dto.ResponseCinemaHallDTO;
 
 public interface ScreeningService {
 
-	ResponseCinemaHallDao addScreening(RequestCinemaHallDao cinemaHallDao);
+	ResponseCinemaHallDTO addScreening(RequestCinemaHallDTO cinemaHallDao);
 
 }

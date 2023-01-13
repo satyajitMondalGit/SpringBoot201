@@ -10,7 +10,7 @@ import com.mindtree.movie.booking.app.model.CinemaHall;
 
 public interface CinemaHallRepositorty extends JpaRepository<CinemaHall, Long>{
 	
-	@Query(value = "select * from CinemaHall C where Screening S  S.Date >= D")
-	Optional<CinemaHall> getAllShow(LocalDate D);
+////	@Query(value = "select * from CinemaHall C where Screening S  S.Date >= D")
+//	Optional<CinemaHall> getAllShow(LocalDate D);
 
 }

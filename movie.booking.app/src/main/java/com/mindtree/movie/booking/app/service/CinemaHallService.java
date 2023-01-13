@@ -1,14 +1,14 @@
 package com.mindtree.movie.booking.app.service;
 
-import com.mindtree.movie.booking.app.dao.CinemaHallDao;
-import com.mindtree.movie.booking.app.dao.RequestCinemaHallDao;
-import com.mindtree.movie.booking.app.dao.ResponseCinemaHallDao;
+import com.mindtree.movie.booking.app.dto.CinemaHallDTO;
+import com.mindtree.movie.booking.app.dto.RequestCinemaHallDTO;
+import com.mindtree.movie.booking.app.dto.ResponseCinemaHallDTO;
 
 public interface CinemaHallService {
 
 	
 
-	CinemaHallDao addCinemaHall(CinemaHallDao cinemaDao);
+	CinemaHallDTO addCinemaHall(CinemaHallDTO cinemaDao);
 
 	
 

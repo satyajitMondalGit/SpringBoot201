@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mindtree.movie.booking.app.dao.CinemaHallDao;
+import com.mindtree.movie.booking.app.dto.CinemaHallDTO;
 import com.mindtree.movie.booking.app.service.CinemaHallService;
 
 @RestController
@@ -17,8 +17,8 @@ public class CinemaHallController {
 	private CinemaHallService cinemaService;
 
 	@PostMapping("/addCinemaHall")
-	ResponseEntity<CinemaHallDao> addCinemaHall(@RequestBody CinemaHallDao cinemaDao ){
+	ResponseEntity<CinemaHallDTO> addCinemaHall(@RequestBody CinemaHallDTO cinemaTo ){
 		
-		return new ResponseEntity<CinemaHallDao>(cinemaService.addCinemaHall(cinemaDao),HttpStatus.OK);
+		return new ResponseEntity<CinemaHallDTO>(cinemaService.addCinemaHall(cinemaTo),HttpStatus.OK);
 	}
 }

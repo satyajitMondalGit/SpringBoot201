@@ -1,4 +1,4 @@
-package com.mindtree.movie.booking.app.dao;
+package com.mindtree.movie.booking.app.dto;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestUserDao {
+public class RequestUserDTO {
 
 	
 	private long userId;

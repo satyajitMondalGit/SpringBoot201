@@ -1,4 +1,4 @@
-package com.mindtree.movie.booking.app.dao;
+package com.mindtree.movie.booking.app.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScreeningDao {
+public class ScreeningDTO {
 
 	
 	private Long id;
-	private LocalDate date;
-	private LocalTime startTime;
-	private LocalTime endTime;
+	private String date;
+	private String startTime;
+	private String endTime;
 	private Double price;
-	private MovieDao movieDao;
+	private MovieDTO movieDTO;
 }

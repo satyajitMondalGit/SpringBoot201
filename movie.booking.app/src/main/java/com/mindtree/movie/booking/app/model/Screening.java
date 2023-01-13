@@ -13,7 +13,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,18 +31,23 @@ import lombok.ToString;
 public class Screening {
 	
 	 @Id
-	 @GeneratedValue(strategy = GenerationType.AUTO)
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 @Column(name = "screening_id")
 	 private Long id;
 	 
+	 @JsonFormat(pattern = "yyyy-mm-dd", shape = Shape.STRING)
 	 @Column(name = "screening_date")
-	 private LocalDate date;
+	 private String date;
 
+	
+	 @JsonFormat(pattern = "HH:mm:ss", shape = Shape.STRING)
 	 @Column(name = "start_time")
-	 private LocalTime startTime;
+	 private String startTime;
 
+	
+	 @JsonFormat(pattern = "HH:mm:ss", shape = Shape.STRING)
 	 @Column(name = "end_time")
-	 private LocalTime endTime;
+	 private String endTime;
 
 	 @Column(name = "price")
 	 private Double price;

@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,15 +30,16 @@ import lombok.ToString;
 public class Movie {
 
 	 @Id
-	 @GeneratedValue(strategy = GenerationType.AUTO)
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 @Column(name = "movie_id")
 	 private Long movieId;
 	 
 	 @Column(name = "title")
 	 private String title;
 	 
+	 @JsonFormat(pattern = "yyyy-mm-dd", shape = Shape.STRING)
 	 @Column(name = "release_date")
-	 private LocalDate releaseDate;
+	 private String releaseDate;
 	 
 	 @Column(name = "genere")
 	 private String genere;
