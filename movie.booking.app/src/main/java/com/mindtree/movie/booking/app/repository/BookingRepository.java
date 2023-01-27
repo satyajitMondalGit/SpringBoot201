@@ -10,6 +10,6 @@ import com.mindtree.movie.booking.app.model.Booking;
 
 public interface BookingRepository extends JpaRepository<Booking, Long>{
 
-	@Query("SELECT b FROM Booking b WHERE b.userId = ?1")
-	Optional<List<Booking>> findByUserId(long userId);
+	@Query("FROM Booking b WHERE b.user.userId = :userId")
+	List<Booking> findByUserId(long userId);
 }

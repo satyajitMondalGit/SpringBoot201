@@ -1,13 +1,16 @@
 package com.mindtree.movie.booking.app.service;
 
-import com.mindtree.movie.booking.app.dto.UserDTO;
+import javax.validation.Valid;
+
+import com.mindtree.movie.booking.app.dto.UserTO;
+import com.mindtree.movie.booking.app.model.User;
 
 public interface UserService {
 
-	UserDTO addUser(UserDTO userDto);
+	User addUser(@Valid UserTO userTo);
 
-	UserDTO getUserDetails(long userId);
+	User getUserDetails(@Valid long userId);
 
-	UserDTO updateUser(long userId, UserDTO userDto);
-
+	User updateUser(@Valid long userId, @Valid UserTO userTo);
+	
 }

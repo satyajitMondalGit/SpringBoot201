@@ -1,18 +1,22 @@
 package com.mindtree.movie.booking.app.dto;
 
-import java.util.List;
+import javax.persistence.Column;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseCinemaHallDTO {
+@ToString
+public class SeatTO {
+
+private long seatId;
 	
-	private long hallId;
-	private String hallName;
-	private String hallType;
-	private List<ScreeningDTO> screeningsDTO;
+
+	private int seatNo;
+	
+	private String possition;
 }

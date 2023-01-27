@@ -8,10 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -25,28 +27,31 @@ import lombok.ToString;
 @AllArgsConstructor(staticName = "build")
 @ToString
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "seat")
+public class Seat {
 	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name  = "user_id")
-	private long userId;
+	@Column(name = "seat_id")
+	private long seatId;
 	
-	@Column(name = "user_name", unique=true)
-	private String userName;
+	@Column(name = "seat_no")
+	private int seatNo;
 	
-	@Column(name = "mobile", unique=true)
-	private String mobileNumber;
+	@Column(name = "possition")
+	private String possition;
 	
-	@Column(name="email")
-	private String email;
 	
-//	@JsonIgnore
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "seat")
 	@JsonManagedReference
-	private Set<Booking> bookings;
+	private Set<SeatReserved> seatReserved;;
+	
+	
+	@ManyToOne
+	@JoinColumn(name="auditorium_id", nullable=false)
+	@JsonBackReference
+	private Auditorium auditorium;
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -56,17 +61,18 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
-		return userId == other.getUserId() && userName.equals(other.getUserName());
+		Seat other = (Seat) obj;
+		return seatId == other.getSeatId() && seatNo == other.getSeatNo();
 	}
+
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, mobileNumber, userId, userName);
+		return Objects.hash(possition, seatId, seatNo);
 	}
-
 	
 	
 	
 
+	
 }

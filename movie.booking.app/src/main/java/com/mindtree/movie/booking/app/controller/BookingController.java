@@ -1,6 +1,6 @@
 package com.mindtree.movie.booking.app.controller;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mindtree.movie.booking.app.dto.BookingDTO;
-import com.mindtree.movie.booking.app.dto.ResponseBookingDTO;
-import com.mindtree.movie.booking.app.dto.ResponseCinemaHallDTO;
-import com.mindtree.movie.booking.app.dto.UserDTO;
 import com.mindtree.movie.booking.app.service.BookingService;
 
 @RestController
@@ -26,25 +22,25 @@ public class BookingController {
 	private BookingService bookingService;
 	
 
-    @GetMapping("/allMovieShows")
-    ResponseEntity<List<ResponseCinemaHallDTO>> getAllmovieShowDetails(){
-    	return new ResponseEntity<List<ResponseCinemaHallDTO>>(bookingService.getAlShow(),HttpStatus.OK);
-    }
-    
+//    @GetMapping("/allMovieShows")
+//    ResponseEntity<?> getAllmovieShowDetails(){
+//    	return new ResponseEntity<>(bookingService.getAlShow(),HttpStatus.OK);
+//    }
+//    
     @PostMapping("/bookYourTickets")
     @ResponseBody
-    ResponseEntity<ResponseBookingDTO> bookTickets(@RequestParam Long userId, @RequestParam long screeningId, @RequestParam int ticketsQuentity ){
+    ResponseEntity<?> bookTickets(@RequestParam @Valid Long userId, @Valid @RequestParam long screeningId, @RequestParam @Valid int ticketsQuentity ){
     	
     	
-    	return new ResponseEntity<ResponseBookingDTO>(bookingService.bookTickets(userId,screeningId,ticketsQuentity),HttpStatus.OK);
+    	return new ResponseEntity<>(bookingService.bookTickets(userId,screeningId,ticketsQuentity),HttpStatus.OK);
     }
     
     
-    @GetMapping("/yourTicketDetails/{userId}")
-    ResponseEntity<List<BookingDTO>> getEarlierTicketsDetails(@PathVariable Long userId ){
+    @GetMapping("/getBookingDetails/{userId}")
+    ResponseEntity<?> getBookingDetails(@PathVariable Long userId ){
     	
     	   	
-    	return new ResponseEntity<List<BookingDTO>>(bookingService.getEarlierTicketsDetails(userId),HttpStatus.OK);
+    	return new ResponseEntity<>(bookingService.getBookingDetails(userId),HttpStatus.OK);
     }
     
     

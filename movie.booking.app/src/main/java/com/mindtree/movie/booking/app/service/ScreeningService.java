@@ -1,10 +1,14 @@
 package com.mindtree.movie.booking.app.service;
 
-import com.mindtree.movie.booking.app.dto.RequestCinemaHallDTO;
-import com.mindtree.movie.booking.app.dto.ResponseCinemaHallDTO;
+import javax.validation.Valid;
+
+import com.mindtree.movie.booking.app.dto.ResponseScreeningTO;
+import com.mindtree.movie.booking.app.dto.ScreeningTO;
 
 public interface ScreeningService {
 
-	ResponseCinemaHallDTO addScreening(RequestCinemaHallDTO cinemaHallDao);
+	ResponseScreeningTO addScreening(@Valid ScreeningTO scrTo);
 
+	Object getAllScreeing(String title);
+	
 }

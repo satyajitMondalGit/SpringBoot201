@@ -3,103 +3,109 @@ package com.mindtree.movie.booking.app.service.impl;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.mindtree.movie.booking.app.dto.BookingDTO;
-import com.mindtree.movie.booking.app.dto.MovieDTO;
-import com.mindtree.movie.booking.app.dto.ResponseBookingDTO;
-import com.mindtree.movie.booking.app.dto.ResponseCinemaHallDTO;
-import com.mindtree.movie.booking.app.dto.ScreeningDTO;
-import com.mindtree.movie.booking.app.dto.UserDTO;
+import com.mindtree.movie.booking.app.dto.BookingTO;
+import com.mindtree.movie.booking.app.dto.SeatTO;
+import com.mindtree.movie.booking.app.exception.HouseFullExcption;
 import com.mindtree.movie.booking.app.exception.ResourceNotFoundException;
 import com.mindtree.movie.booking.app.model.Booking;
-import com.mindtree.movie.booking.app.model.CinemaHall;
-import com.mindtree.movie.booking.app.model.Movie;
 import com.mindtree.movie.booking.app.model.Screening;
+import com.mindtree.movie.booking.app.model.Seat;
+import com.mindtree.movie.booking.app.model.SeatReserved;
 import com.mindtree.movie.booking.app.model.User;
 import com.mindtree.movie.booking.app.repository.BookingRepository;
-import com.mindtree.movie.booking.app.repository.CinemaHallRepositorty;
 import com.mindtree.movie.booking.app.repository.ScreeningRepository;
+import com.mindtree.movie.booking.app.repository.SeatRepository;
+import com.mindtree.movie.booking.app.repository.SeatReservedRepository;
 import com.mindtree.movie.booking.app.repository.UserRepository;
 import com.mindtree.movie.booking.app.service.BookingService;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class BookingServiceImpl implements BookingService {
-
-	@Autowired
-	private CinemaHallRepositorty hallRepo;
-
-	@Autowired
-	private BookingRepository bookingRepo;
-
-	@Autowired
-	private ScreeningRepository screeningRepo;
 
 	@Autowired
 	private UserRepository userRepo;
 
-	@Override
-	public List<ResponseCinemaHallDTO> getAlShow() {
+	@Autowired
+	private ScreeningRepository scrRepo;
 
-		List<CinemaHall> cinemaHallList = hallRepo.findAll();
+	@Autowired
+	private SeatReservedRepository seatReservedRepo;
 
-		List<ResponseCinemaHallDTO> cinemaHallDto = cinemaHallList.stream().map(c -> new ResponseCinemaHallDTO(
-				c.getHallId(), c.getHallName(), c.getHallType(),
-				c.getScreenings().stream().map(s -> new ScreeningDTO(s.getId(), s.getStartTime(), s.getEndTime(),
-						s.getDate(), s.getPrice(),
-						new MovieDTO(s.getMovie().getMovieId(), s.getMovie().getTitle(), s.getMovie().getReleaseDate(),
-								s.getMovie().getGenere(), s.getMovie().getDuration())))
-						.collect(Collectors.toList())))
-				.collect(Collectors.toList());
+	@Autowired
+	private SeatRepository SeatRepo;
 
-		return cinemaHallDto;
-	}
+	@Autowired
+	private BookingRepository bookingRepo;
+
+	@Value("${houseeFull}")
+	private String HousefullMessage;
 
 	@Override
-	public ResponseBookingDTO bookTickets(Long userId, long screeningId, int ticketsQuentity) {
+	public Object bookTickets(@Valid Long userId, @Valid long screeningId, @Valid int ticketsQuentity) {
 
-		Screening screening = screeningRepo.findById(screeningId)
-				.orElseThrow(() -> new ResourceNotFoundException("Screening", "Id", screeningId));
-
-		ScreeningDTO scrDto = new ScreeningDTO(screening.getId(), screening.getDate(), screening.getStartTime(),
-				screening.getEndTime(), screening.getPrice(),
-				new MovieDTO(screening.getMovie().getMovieId(), screening.getMovie().getTitle(),
-						screening.getMovie().getReleaseDate(), screening.getMovie().getGenere(),
-						screening.getMovie().getDuration()));
+		int index = 0;
+		List<Seat> unreserved;
 		User user = userRepo.findById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("User", "UserId", userId));
-		UserDTO userDto = new UserDTO(user.getUserId(), user.getUserName(), user.getMobileNumber(), user.getEmail());
+				.orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
+		Screening scr = scrRepo.findById(screeningId)
+				.orElseThrow(() -> new ResourceNotFoundException("Screening", "screeningId", screeningId));
+
+		List<Seat> seatList = SeatRepo.findByAuditoriamId(scr.getAuditorium().getAuditoriumId());
+		if (ticketsQuentity <= seatList.size()) {
+			List<SeatReserved> reservedList = seatReservedRepo.findByScreeingId(scr.getId()).orElse(null);
+			if (reservedList == null || reservedList.size() + ticketsQuentity <= seatList.size()) {
+				List<Long> reservedSeatid = reservedList.stream().map(r -> r.getSeat().getSeatId())
+						.collect(Collectors.toList());
+
+				unreserved = seatList.stream().filter(s -> !reservedSeatid.contains(s.getSeatId()))
+						.limit(ticketsQuentity).collect(Collectors.toList());
+
+			} else {
+				throw new HouseFullExcption(HousefullMessage);
+			}
+
+		} else {
+			throw new HouseFullExcption(HousefullMessage);
+		}
+
+		//
+
 		Booking booking = new Booking();
 		booking.setBookingDate(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
 		booking.setBookingTime(LocalTime.now().format(DateTimeFormatter.ISO_TIME));
-		booking.setScreeningId(screening.getId());
 		booking.setTicketQty(ticketsQuentity);
-		booking.setUserId(user.getUserId());
-		// booking.setUser(user);
+		booking.setUser(user);
+		booking.setScreening(scr);
 
-		Booking bookingUpdated = bookingRepo.save(booking);
+		Booking updatedBooking = bookingRepo.save(booking);
 
-		return new ResponseBookingDTO(bookingUpdated.getBookingId(),bookingUpdated.getBookingDate(),bookingUpdated.getBookingTime(),bookingUpdated.getTicketQty(),userDto,scrDto);
+		unreserved.stream().map(s -> seatReservedRepo.save(SeatReserved.build((long) 0, s, updatedBooking, scr)))
+				.collect(Collectors.toList());
 
+
+		return BookingTO.build(updatedBooking.getBookingId(), updatedBooking.getBookingDate(),
+				updatedBooking.getBookingTime(), ticketsQuentity, scr.getId(), scr.getAuditorium().getAuditoriumId(),
+				unreserved.stream().map(s -> new SeatTO(s.getSeatId(), s.getSeatNo(), s.getPossition()))
+						.collect(Collectors.toList()));
 	}
 
 	@Override
-	public List<BookingDTO> getEarlierTicketsDetails(long userId) {
-
+	public Object getBookingDetails(Long userId) {
 		User user = userRepo.findById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("User", "UserId", userId));
+				.orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
 		
-		List<Booking> bookingList = bookingRepo.findByUserId((long)userId).orElseThrow(() -> new ResourceNotFoundException("Booking", "UserId", userId));
 		
-		return bookingList.stream().map(b->new BookingDTO(b.getBookingId(),b.getBookingDate(),b.getBookingTime(),b.getTicketQty(),b.getScreeningId(),b.getUserId())).collect(Collectors.toList());
+		List<Booking> bookingList = bookingRepo.findByUserId(userId);
+		return bookingList;
 	}
 
 }

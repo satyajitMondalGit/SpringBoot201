@@ -1,21 +1,23 @@
 package com.mindtree.movie.booking.app.model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +26,7 @@ import lombok.ToString;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "build")
 @ToString
 @Entity
 @Table(name = "screening")
@@ -52,14 +54,45 @@ public class Screening {
 	 @Column(name = "price")
 	 private Double price;
 	 
-	 @ManyToOne
-	 @JsonBackReference
-	 private CinemaHall cinemaHall;
+	 
+	 @Column(name = "is_house_full")
+	 private boolean isHouseFull;
+	
+	 @JsonIgnore
+	 @OneToMany(mappedBy = "screening")
+	 private Set<SeatReserved> seatReserved;
+
+	 @JsonIgnore
+	 @OneToMany(mappedBy = "screening")
+	 private Set<Booking> bookings;
 	 
 	 @ManyToOne
-	 @JsonManagedReference
+	 @JoinColumn(name="auditorium_id", nullable=false)
+	 @JsonBackReference
+	 private Auditorium auditorium;
+
+	 @ManyToOne
+	 @JoinColumn(name="movie_id", nullable=false)
+	 @JsonBackReference
 	 private Movie movie;
 
-	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Screening other = (Screening) obj;
+		return id == other.getId() && date.equals(other.getDate()) && startTime.equals(other.getStartTime()); 
+	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(date, endTime, id, isHouseFull, price, startTime);
+	}
+	 
+	 
+	 
 }
