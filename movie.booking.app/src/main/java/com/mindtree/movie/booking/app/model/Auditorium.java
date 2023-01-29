@@ -1,10 +1,10 @@
 package com.mindtree.movie.booking.app.model;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +26,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "auditorium")
-public class Auditorium {
+public class Auditorium implements Comparable<Auditorium> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +69,15 @@ public class Auditorium {
 	@Override
 	public int hashCode() {
 		return Objects.hash( AuditoriumName, auditoriumId, auditoriumType);
+	}
+
+
+	@Override
+	public int compareTo(Auditorium o) {
+		
+		return Comparator.comparingLong(Auditorium::getAuditoriumId)
+				.thenComparing(Auditorium::getAuditoriumName)
+				.thenComparing(Auditorium::getAuditoriumType).compare(this, o);
 	}
 	
 	

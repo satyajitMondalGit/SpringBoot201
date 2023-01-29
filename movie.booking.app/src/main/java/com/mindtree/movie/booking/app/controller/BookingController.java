@@ -2,6 +2,8 @@ package com.mindtree.movie.booking.app.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import com.mindtree.movie.booking.app.service.BookingService;
 @RestController
 public class BookingController {
 	
+	private Logger logger = LoggerFactory.getLogger(BookingController.class);
 
 	@Autowired
 	private BookingService bookingService;
@@ -29,8 +32,9 @@ public class BookingController {
 //    
     @PostMapping("/bookYourTickets")
     @ResponseBody
-    ResponseEntity<?> bookTickets(@RequestParam @Valid Long userId, @Valid @RequestParam long screeningId, @RequestParam @Valid int ticketsQuentity ){
+    ResponseEntity<?> bookTickets(@RequestParam @Valid long userId, @Valid @RequestParam long screeningId, @RequestParam @Valid int ticketsQuentity ){
     	
+    	logger.info(" BookingController - bookTickets","userId, screeningId,  ticketsQuentity", userId, screeningId, ticketsQuentity);
     	
     	return new ResponseEntity<>(bookingService.bookTickets(userId,screeningId,ticketsQuentity),HttpStatus.OK);
     }
@@ -39,6 +43,7 @@ public class BookingController {
     @GetMapping("/getBookingDetails/{userId}")
     ResponseEntity<?> getBookingDetails(@PathVariable Long userId ){
     	
+    	logger.info(" BookingController - bookTickets","userId ", userId);
     	   	
     	return new ResponseEntity<>(bookingService.getBookingDetails(userId),HttpStatus.OK);
     }

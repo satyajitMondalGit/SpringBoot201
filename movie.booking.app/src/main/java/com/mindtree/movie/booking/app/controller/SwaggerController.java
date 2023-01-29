@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-public class SwaggerCcntroller {
+public class SwaggerController {
 
 	
 	 @ApiIgnore

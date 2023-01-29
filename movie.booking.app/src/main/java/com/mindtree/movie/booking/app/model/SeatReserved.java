@@ -25,7 +25,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name  = "seat_booking")
-public class SeatReserved {
+public class SeatReserved implements Comparable<SeatReserved>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +64,13 @@ public class SeatReserved {
 			return false;
 		SeatReserved other = (SeatReserved) obj;
 		return  reserviedId == other.getReserviedId();
+	}
+
+
+	@Override
+	public int compareTo(SeatReserved o) {
+		
+		return Long.compare(reserviedId, o.getReserviedId());
 	}
 
 

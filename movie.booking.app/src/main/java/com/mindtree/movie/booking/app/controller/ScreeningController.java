@@ -2,6 +2,8 @@ package com.mindtree.movie.booking.app.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,21 +21,23 @@ import com.mindtree.movie.booking.app.service.ScreeningService;
 @RestController
 public class ScreeningController {
 
+	private Logger logger = LoggerFactory.getLogger(ScreeningController.class);
+	
 	@Autowired
 	ScreeningService screeningService;
 	
 	@PostMapping("/addScrinning")	
 	ResponseEntity<ResponseScreeningTO> addAScreening(@RequestBody @Valid ScreeningTO scrTo){
+		
+		logger.info("ScreeningController - addAScreening","scrTo", scrTo.toString());
 		 
 		return new ResponseEntity<>(screeningService.addScreening(scrTo), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/getAllScreeing/{movieTitle}")
-	ResponseEntity<?> getAllScreeing (@PathVariable String movieTitle){
-		if(movieTitle == null && "".equals(movieTitle)) {
-		
-			throw new WrongArgumentException(" movie title can not be blank");
-		}
+	ResponseEntity<?> getAllScreeing (@PathVariable  @Valid String movieTitle){
+
+		logger.info("ScreeningController - getAllScreeing","movieTitle", movieTitle);
 		
 		return new ResponseEntity<>(screeningService.getAllScreeing(movieTitle), HttpStatus.OK);
 	}

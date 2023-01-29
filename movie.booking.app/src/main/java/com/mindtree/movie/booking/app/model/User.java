@@ -1,5 +1,6 @@
 package com.mindtree.movie.booking.app.model;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,33 +20,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "build")
 @ToString
 @Entity
 @Table(name = "user")
-public class User {
-	
+public class User implements Comparable<User> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name  = "user_id")
+	@Column(name = "user_id")
 	private long userId;
-	
-	@Column(name = "user_name", unique=true)
+
+	@Column(name = "user_name", unique = true)
 	private String userName;
-	
-	@Column(name = "mobile", unique=true)
+
+	@Column(name = "mobile", unique = true)
 	private String mobileNumber;
-	
-	@Column(name="email")
+
+	@Column(name = "email")
 	private String email;
-	
-//	@JsonIgnore
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
-	@JsonManagedReference
+//	@JsonManagedReference
 	private Set<Booking> bookings;
 
 	@Override
@@ -65,8 +64,11 @@ public class User {
 		return Objects.hash(email, mobileNumber, userId, userName);
 	}
 
-	
-	
-	
+	@Override
+	public int compareTo(User o) {
+
+		return Comparator.comparingLong(User::getUserId).thenComparing(User::getUserName)
+				.thenComparing(User::getMobileNumber).thenComparing(User::getEmail).compare(this, o);
+	}
 
 }

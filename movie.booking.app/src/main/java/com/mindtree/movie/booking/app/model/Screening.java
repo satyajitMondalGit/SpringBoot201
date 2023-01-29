@@ -1,5 +1,6 @@
 package com.mindtree.movie.booking.app.model;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,51 +31,48 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "screening")
-public class Screening {
-	
-	 @Id
-	 @GeneratedValue(strategy = GenerationType.IDENTITY)
-	 @Column(name = "screening_id")
-	 private Long id;
-	 
-	 @JsonFormat(pattern = "yyyy-mm-dd", shape = Shape.STRING)
-	 @Column(name = "screening_date")
-	 private String date;
+public class Screening implements Comparable<Screening> {
 
-	
-	 @JsonFormat(pattern = "HH:mm:ss", shape = Shape.STRING)
-	 @Column(name = "start_time")
-	 private String startTime;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "screening_id")
+	private Long id;
 
-	
-	 @JsonFormat(pattern = "HH:mm:ss", shape = Shape.STRING)
-	 @Column(name = "end_time")
-	 private String endTime;
+	@JsonFormat(pattern = "yyyy-mm-dd", shape = Shape.STRING)
+	@Column(name = "screening_date")
+	private String date;
 
-	 @Column(name = "price")
-	 private Double price;
-	 
-	 
-	 @Column(name = "is_house_full")
-	 private boolean isHouseFull;
-	
-	 @JsonIgnore
-	 @OneToMany(mappedBy = "screening")
-	 private Set<SeatReserved> seatReserved;
+	@JsonFormat(pattern = "HH:mm:ss", shape = Shape.STRING)
+	@Column(name = "start_time")
+	private String startTime;
 
-	 @JsonIgnore
-	 @OneToMany(mappedBy = "screening")
-	 private Set<Booking> bookings;
-	 
-	 @ManyToOne
-	 @JoinColumn(name="auditorium_id", nullable=false)
-	 @JsonBackReference
-	 private Auditorium auditorium;
+	@JsonFormat(pattern = "HH:mm:ss", shape = Shape.STRING)
+	@Column(name = "end_time")
+	private String endTime;
 
-	 @ManyToOne
-	 @JoinColumn(name="movie_id", nullable=false)
-	 @JsonBackReference
-	 private Movie movie;
+	@Column(name = "price")
+	private Double price;
+
+	@Column(name = "is_house_full")
+	private boolean isHouseFull;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "screening")
+	private Set<SeatReserved> seatReserved;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "screening")
+	private Set<Booking> bookings;
+
+	@ManyToOne
+	@JoinColumn(name = "auditorium_id", nullable = false)
+	@JsonBackReference
+	private Auditorium auditorium;
+
+	@ManyToOne
+	@JoinColumn(name = "movie_id", nullable = false)
+	@JsonBackReference
+	private Movie movie;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -85,14 +83,20 @@ public class Screening {
 		if (getClass() != obj.getClass())
 			return false;
 		Screening other = (Screening) obj;
-		return id == other.getId() && date.equals(other.getDate()) && startTime.equals(other.getStartTime()); 
+		return id == other.getId() && date.equals(other.getDate()) && startTime.equals(other.getStartTime());
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(date, endTime, id, isHouseFull, price, startTime);
 	}
-	 
-	 
-	 
+
+	@Override
+	public int compareTo(Screening o) {
+
+		return Comparator.comparingLong(Screening::getId).thenComparing(Screening::getDate)
+				.thenComparing(Screening::getStartTime).thenComparing(Screening::getEndTime)
+				.thenComparingDouble(Screening::getPrice).compare(this, o);
+	}
+
 }

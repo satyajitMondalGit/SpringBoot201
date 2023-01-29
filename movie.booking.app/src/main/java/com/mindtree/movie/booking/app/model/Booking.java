@@ -1,5 +1,6 @@
 package com.mindtree.movie.booking.app.model;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,40 +31,39 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "ticket_booking")
-public class Booking {
+public class Booking implements Comparable<Booking> {
 
 	@Id
-	 @GeneratedValue(strategy = GenerationType.IDENTITY)
-	 @Column(name = "booking_id")
-	 private long bookingId;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "booking_id")
+	private long bookingId;
+
 	@JsonFormat(pattern = "yyyy-mm-dd", shape = Shape.STRING)
 	@Column(name = "booking_date")
-	 private String  bookingDate;
+	private String bookingDate;
 
-	 @JsonFormat(pattern = "HH:mm:ss", shape = Shape.STRING)
-	 @Column(name = "booking_time")
-	 private String  bookingTime;
-	 
-	 @Column(name = "tkt_qty")
-	 private int ticketQty;
-	
-	 @JsonIgnore
-	 @OneToMany(mappedBy = "booking")
+	@JsonFormat(pattern = "HH:mm:ss", shape = Shape.STRING)
+	@Column(name = "booking_time")
+	private String bookingTime;
+
+	@Column(name = "tkt_qty")
+	private int ticketQty;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "booking")
 //	 @JsonManagedReference
-	 private Set<SeatReserved> seatReserved;
-	 
-	
-	 @ManyToOne
-	 @JoinColumn(name="user_id", nullable=false)
-	 @JsonBackReference
-	 private User user;
+	private Set<SeatReserved> seatReserved;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	@JsonBackReference
+	private User user;
 
 //	 @JsonIgnore
-	 @ManyToOne
-	 @JoinColumn(name="screening_id", nullable=false)
-	 @JsonBackReference
-	 private Screening screening;
+	@ManyToOne
+	@JoinColumn(name = "screening_id", nullable = false)
+	@JsonBackReference
+	private Screening screening;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -74,14 +74,20 @@ public class Booking {
 		if (getClass() != obj.getClass())
 			return false;
 		Booking other = (Booking) obj;
-		return bookingId==other.getBookingId() && bookingDate.equals(other.getBookingDate()) &&  bookingTime.equals(other.getBookingTime()) && ticketQty == other.getTicketQty();
+		return bookingId == other.getBookingId() && bookingDate.equals(other.getBookingDate())
+				&& bookingTime.equals(other.getBookingTime()) && ticketQty == other.getTicketQty();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(bookingDate, bookingId, bookingTime,  ticketQty);
+		return Objects.hash(bookingDate, bookingId, bookingTime, ticketQty);
 	}
-	 
-	 
-	 
+
+	@Override
+	public int compareTo(Booking o) {
+
+		return Comparator.comparingLong(Booking::getBookingId).thenComparing(Booking::getBookingDate)
+				.thenComparing(Booking::getBookingTime).thenComparingInt(Booking::getTicketQty).compare(this, o);
+	}
+
 }
