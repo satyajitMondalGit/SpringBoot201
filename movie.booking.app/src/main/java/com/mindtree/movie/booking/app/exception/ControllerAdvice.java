@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,21 +28,29 @@ public class ControllerAdvice {
 	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
-	public String MissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+	public String missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException ex) {
+       
+        return ex.getMessage();
+    }
+	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+	public String httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
        
         return ex.getMessage();
     }
 
+
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	public ResponseEntity<String> MethodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException ex) {
+	public ResponseEntity<String> methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException ex) {
        
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 	
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
 	@ExceptionHandler(HouseFullExcption.class)
-    public ResponseEntity<String> HousefullExceptionHandler(HouseFullExcption ex) {
+    public ResponseEntity<String> housefullExceptionHandler(HouseFullExcption ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", ex.getMessage());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(ex.getMessage());
@@ -49,7 +58,7 @@ public class ControllerAdvice {
 	
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> ResourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
+    public ResponseEntity<String> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

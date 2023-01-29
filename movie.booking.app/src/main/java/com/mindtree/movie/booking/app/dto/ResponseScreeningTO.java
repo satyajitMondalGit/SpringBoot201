@@ -45,8 +45,8 @@ public class ResponseScreeningTO {
 
 	private boolean isHouseFull;
 
-	private Auditorium auditorium;
+	private ResponseAudiTO auditorium;
 
-	private Movie movie;
+	private String movieTitle;
 
 }
